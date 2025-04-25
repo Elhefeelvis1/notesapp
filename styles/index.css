@@ -1,0 +1,101 @@
+/* Color Scheme */
+:root{
+    --p-white: #F5F7F8;
+    --gold: #F4CE14;
+    --green: #495E57;
+    --p-black: #45474B;
+    --black-shadow: #949494;
+    --black-search: #e7e5e5;
+    --icon-size: 25px;
+}
+
+*{
+    box-sizing: border-box;
+}
+body{
+    margin: 0;
+    padding: 0px;
+    font-family: Helvetica, sans-serif, Arial, sans-serif
+}
+nav{
+    height: 70px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav .logo-div{
+    object-fit: contain;
+    height: 60px;
+}
+nav .logo-div img{
+    width: 60px;
+    height: 60px;
+}
+nav .search-setting{
+    display: flex;
+    align-items: center;
+}
+nav .search-setting .search-bar-div form{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    background-color: var(--black-search);
+    padding: 5px;
+    border-radius: 25px;
+}
+nav .search-setting input{
+    border-radius: 40px;
+    outline: none;
+    border: none;
+    height: 35px;
+    padding: 0 10px;
+    margin-right: 5px;
+    flex-shrink: 3;
+}
+nav .search-setting .submit{
+    background-color: var(--p-black);
+    content: counter("name");
+    color: white;
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+}
+nav .search-setting .submit i{
+    font-size: 20px;
+}
+nav .search-setting .settings i{
+    font-size: var(--icon-size);
+    margin-left: 15px;
+    color: var(--p-black);
+}
+.bottom-nav{
+    z-index: 10;
+    background-color: var(--p-black);
+    height: 90px;
+    width: 100%;
+    padding: 45px;
+    border-radius: 70px 70px 0 0;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px 5px var(--black-shadow);
+}
+.bottom-nav div{
+}
+.bottom-nav div i{
+    color: var(--p-white);
+    font-size: var(--icon-size);
+}
+
+
+
+
+@media only screen and (min-width: 579px) {
+    body{
+        display: none;
+    }
+}
