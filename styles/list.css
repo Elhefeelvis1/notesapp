@@ -1,0 +1,111 @@
+/* Color Scheme */
+:root{
+    --p-white: #F5F7F8;
+    --gold: #F4CE14;
+    --green: #495E57;
+    --p-black: #45474B;
+    --black-shadow: #949494;
+    --black-search: #e7e5e5;
+    --icon-size: 25px;
+}
+
+body{
+    background: var(--green);
+    margin: 0;
+    padding: 0;
+    color: var(--p-white);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.lists-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+}
+
+.list-box{
+    background-color: var(--p-black);
+    max-width: 700px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.list-content .list-title{
+    text-align: center;
+}
+
+.list-box .list-sub{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.list-box .list-sub .list-update{
+    display: flex;
+    gap: 30px;
+}
+
+.list-sub .list-update input[type=submit]{
+    padding: 8px 25px;
+    font-size: 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.list-sub .list-update .list-edit input[type=submit]{
+    background-color: var(--gold);
+}
+
+.list-sub .list-update .list-delete input[type=submit]{
+    background-color: red;
+}
+
+/* For editList.html */
+
+.container{
+    display: flex;
+    justify-content: center;
+    padding-top: 70px;
+}
+.edit-form{
+    max-width: 600px;
+    padding: 25px;
+    border: 1px solid var(--gold);
+}
+
+.edit-form form{
+    display: flex;
+    flex-direction: column;
+}
+
+.edit-form form input{
+    width: 500px;
+    padding: 10px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    margin-bottom: 25px;
+}
+
+.edit-form form textarea{
+    padding: 10px;
+    outline: none;
+}
+
+.edit-form form button{
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--gold);
+    border: none;
+    color: var(--p-black);
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.edit-form form button:hover{
+    background-color: var(--black-search);
+    border: 3px inset var(--gold);
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/list.css">
+    <title>My Lists</title>
+</head>
+<body>
+    <main>
+        <div class="container">
+            <div class="edit-form">
+                <form action="/update" method="post" class="update">
+                    <input type="hidden" id="editId" name="editId" value="">
+                    <label for="editContent">Title</label>
+                    <input type="text" id="editTitle" name="editTitle">
+                    <label for="editContent">Content</label>
+                    <textarea name="editContent" id="editContent" rows="20"></textarea>
+
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+            <div class="edit-form">
+                <form action="/addNew" method="post" class="add-new">
+                    <input type="hidden" id="editId" name="editId" value="">
+                    <label for="editContent">Title</label>
+                    <input type="text" id="editTitle" name="editTitle">
+                    <label for="editContent">Content</label>
+                    <textarea name="editContent" id="editContent" rows="20"></textarea>
+
+                    <button type="submit">Add new</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
