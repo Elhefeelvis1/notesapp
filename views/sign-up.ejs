@@ -1,0 +1,32 @@
+<%- include('partials/login-header.ejs') %>
+    <div class="login container">
+        <div class="form">
+            <form action="/register" method="post">
+                <input type="text" name="name" placeholder="Enter your alias" required>
+                <input type="email" name="email" placeholder="Enter your email" required>
+                <input class="pwd" type="password" name="pwd" placeholder="Create new password" required>
+                <input class="pwdRepeat" type="password" name="pwdRepeat" placeholder="Repeat password" required>
+                <button type="submit" onclick="return submitForm()">Create account</button>
+            </form>
+        </div>
+        <div class="link">
+            <p>Already registered? <a href="/login">Login</a></p>
+        </div>
+    </div>
+</body>
+<script>
+    function submitForm() {
+        let pwd = document.querySelector(".pwd").value;
+        let pwdRepeat = document.querySelector(".pwdRepeat").value;
+        if (pwd === pwdRepeat) {
+            console.log("Submitted")
+            // Allow form submission
+            return true;
+        }else {
+            alert("Passwords don't match");
+            // Prevent form submission
+            return false;
+        }
+    }
+</script>
+</html>

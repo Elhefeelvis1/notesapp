@@ -9,47 +9,57 @@
     --icon-size: 25px;
 }
 
-main{
-    margin: 0 15px;
+.profile{
+    margin: 110px 0 0 ;
 }
-main .top-div .back-button{
-    width: 100%;
-    margin-top: 20px;
-}
-main .top-div .back-button button{
-    border: none;
-    background-color: transparent;
-}
-main .top-div .back-button button i{
-    font-size: 20px;
-}
-main .profile-dets{
+.profile .profile-dets{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
 }
-main .profile-dets .profile-img{
+.profile .profile-dets .profile-img{
     width: 100px;
     height: 100px;
     background-color: var(--green);
     border-radius: 50%;
     margin-top: 20px;
 }
-main .profile-dets .follow{
+.profile .profile-dets .follow{
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     margin-top: -20px;
 }
-main .options{
+.profile .options{
     display: flex;
     gap: 15px;
 }
-main .options .update, .view{
+.profile .options .option{
     background-color: var(--black-search);
-    padding: 5px 10px;
+    padding: 5px 25px;
     border-radius: 20px;
     border:2px solid var(--black-shadow);
+}
+.profile .notelist{
+    margin-top: 40px;
+}
+.profile .notelist .header{
+    padding: 0 25px;
+}
+.profile .notelist .list{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding: 10px 40px;
+}
+.profile .notelist .list:hover{
+    background-color: var(--green);
+}
+.profile .notelist .list button{
+    padding: 10px 25px;
+    border-radius: 25px;
+    background-color: var(--gold);
 }
