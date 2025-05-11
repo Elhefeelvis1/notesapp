@@ -1,5 +1,5 @@
 CREATE TABLE users (
-    id PRIMARY KEY SERIAL,
+    id SERIAL PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE notes (
-    id PRIMARY KEY SERIAL,
+    id SERIAL PRIMARY KEY,
     title TEXT,
     content TEXT,
     last_updated date,
@@ -17,3 +17,7 @@ CREATE TABLE notes (
     UNIQUE (title, content)
 );
 
+INSERT INTO notes (
+	title, content, last_updated, favourite, completed,
+	user_id
+) VALUES ("Test Note 3", "This is a test note for user test2", "2/2/2025", true, true, 3)

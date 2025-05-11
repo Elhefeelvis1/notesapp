@@ -4,6 +4,7 @@
             <form action="/register" method="post">
                 <input type="text" name="name" placeholder="Enter your alias" required>
                 <input type="email" name="email" placeholder="Enter your email" required>
+                <span><%= locals.error ? error : "" %></span>
                 <input class="pwd" type="password" name="pwd" placeholder="Create new password" required>
                 <input class="pwdRepeat" type="password" name="pwdRepeat" placeholder="Repeat password" required>
                 <button type="submit" onclick="return submitForm()">Create account</button>
