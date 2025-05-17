@@ -1,19 +1,30 @@
 import express from 'express';
 import ejs from 'ejs';
-import pg from 'pg';
-import bcrypt from 'bcrypt';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy } from "passport-local";
+
 // Importing database login from another file(ignored on git)
 import db from "./imports/dbConn.js";
-import * as user from "./imports/login_register.js";
+// Importing login and register from imports folder
+import * as userAuth from "./imports/login_register.js";
 
 const app = express();
 const port = 3000;
-const saltRounds = 5;
-let userId;
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+// Seddion middleware (Express and passport)
+app.use(session({
+    secret: "MYPERSONALSECRETKEY",
+    resave: false,
+    saveUninitialized: true
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Connecting to database @ ./imports/dbConn.js
 db.connect();
 
 // GET routes for all pages
@@ -26,13 +37,18 @@ app.get("/profile", async (req, res) =>{
 })
 // route for all user lists
 app.get("/lists", async (req, res) =>{
-    const data = await db.query("SELECT * FROM notes WHERE userId = $1", [
-        userId
-    ])
-    let content = data.rows;
-    res.render("lists.ejs", {
-        note: content
-    })
+    if(req.isAuthenticated()){
+        // const data = await db.query("SELECT * FROM notes WHERE user_id = $1", [
+        //     result.id
+        // ])
+        // let content = data.rows;
+        // res.render("lists.ejs", {
+        //     notes: content
+        // })
+        res.render("lists.ejs")
+    }else{
+        res.redirect("/login")
+    }
 })
 // Login and sign up
 app.get("/login", async (req, res) =>{
@@ -50,37 +66,43 @@ app.post("/register", async (req, res) => {
     let email = req.body.email;
     let pwd = req.body.pwd;
 
-    user.registerUser(name, email, pwd, db);
+    userAuth.registerUser(name, email, pwd, db);
 
     res.render("login.ejs");
 })
 
 // User log in
-app.post("/login", async (req, res) => {
-    let email = req.body.email;
-    let userPassword = req.body.pwd;
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/lists",
+    failureRedirect: "/login"
+}))
 
+passport.use(new Strategy ({
+    usernameField: 'email'
+}, async function verify(username, password, cb){
+    console.log("Running passport");
     try{
-        let result = await user.loginUser(email, userPassword, db);
-        console.log(result);
+        let user = await userAuth.loginUser(username, password, db);
+        console.log("From passport" + user);
 
-        if(typeof result == "number"){
-            res.redirect("/lists");
-            userId = result;
-        }else if(result == "wrong password"){
-            res.render("login.ejs", {
-                error: "Wrong Password!!"
-            })
-        }else if(result == "Email not registered"){
-            res.render("login.ejs", {
-                error: "Email does not exist!!"
-            });
+        if(user == "wrong password"){
+            return cb(null, false);
+        }else if(user == "Email not registered"){
+            return cb(null, false, { message: 'Email not registered.' })
+        }else{
+            return cb(null, user);
         }
     }catch(err){
-        console.error(err);
+        return cb(err)
     }
-})
+}))
 
+passport.serializeUser((user, cb) => {
+    cb(null, user);
+})
+passport.deserializeUser((user, cb) => {
+    cb(null, user)
+})
 
 //Listening in port 3000
 app.listen(port, () => {
