@@ -27,7 +27,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 24
     }
-}))
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -36,34 +36,34 @@ db.connect();
 
 // GET routes for all pages
 app.get("/", async (req, res) => {
-    res.render('index.ejs')
-})
+    res.render('index.ejs');
+});
 //route for profile
 app.get("/profile", async (req, res) =>{
     if(req.isAuthenticated()){
         let user = req.user;
         res.render("profile.ejs", {
             userData: user
-        })
+        });
     }else{
-        res.redirect("/login")
+        res.redirect("/login");
     }
-})
+});
 // route for all user lists
 app.get("/lists", async (req, res) =>{
     if(req.isAuthenticated()){
         let user = req.user;
         const data = await db.query("SELECT * FROM notes WHERE user_id = $1", [
             user.id
-        ])
+        ]);
         let content = data.rows;
         res.render("lists.ejs", {
             notes: content
-        })
+        });
     }else{
-        res.redirect("/login")
+        res.redirect("/login");
     }
-})
+});
 
 // Edit lists
 app.post("/edit", (req, res) => {
@@ -77,7 +77,7 @@ app.post("/edit", (req, res) => {
         title: title,
         content: content
     });
-})
+});
 
 app.post("/update", async (req, res) => {
     let id = req.body.editId;
@@ -89,14 +89,14 @@ app.post("/update", async (req, res) => {
     ])
     console.log(update);
     res.redirect("/lists");
-})
+});
 // Login and sign up
 app.get("/login", async (req, res) =>{
-    res.render("login.ejs")
-})
+    res.render("login.ejs");
+});
 app.get("/sign-up", async (req, res) =>{
-    res.render("sign-up.ejs")
-})
+    res.render("sign-up.ejs");
+});
 
 // POST routes
 
@@ -115,7 +115,7 @@ app.post("/register", async (req, res) => {
 app.post("/login", passport.authenticate("local", {
     successRedirect: "/lists",
     failureRedirect: "/login"
-}))
+}));
 
 passport.use(new Strategy ({
     usernameField: 'email'
@@ -126,12 +126,12 @@ passport.use(new Strategy ({
         if(user == "wrong password"){
             return cb(null, false);
         }else if(user == "Email not registered"){
-            return cb(null, false, { message: 'Email not registered.' })
+            return cb(null, false, { message: 'Email not registered.' });
         }else{
             return cb(null, user);
         }
     }catch(err){
-        return cb(err)
+        return cb(err);
     }
 }))
 
