@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/list.css">
-    <title>My Lists</title>
-</head>
-<body>
+<%- include("partials/full-header.ejs") %>
     <main>
         <div class="lists-container">
             <% if (locals.notes){ %>
@@ -26,18 +18,24 @@
                         </div>
                         <div class="list-sub">
                             <div class="list-data">
-                                <p>20/2/2025</p>
+                                <p><%= note.last_updated %></p>
                             </div>
                             <div class="list-update">
                                 <div class="list-edit">
-                                    <form action="/edit">
+                                    <form action="/edit" method="POST">
                                         <input type="hidden" name="editId" value="<%= note.id %>">
-                                        <input type="submit" value="Edit">
+                                        <input type="hidden" name="editTitle" value="<%= note.title %>">
+                                        <input type="hidden" name="editContent" value="<%= note.content %>">
+                                        <label for="<%= note.id %>">Edit</label>
+                                        <input id="<%= note.id %>" type="submit" hidden>
                                     </form>
                                 </div>
                                 <div class="list-delete">
-                                    <input type="hidden" name="deleteId" value="<%= note.id %>">
-                                    <input type="submit" value="Delete">
+                                    <form action="/delete" method="post">
+                                        <input type="hidden" name="deleteId" value="<%= note.id %>">
+                                        <label for="<%= note.id %>">Delete</label>
+                                        <input id="<%= note.id %>" type="submit" hidden>
+                                    </form>
                                 </div>
                             </div>
                         </div>

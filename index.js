@@ -12,6 +12,10 @@ import * as userAuth from "./imports/login_register.js";
 const app = express();
 const port = 3000;
 
+let currentDate = new Date().getFullYear() + "-" 
+  + (new Date().getMonth() + 1) + "-"
+  + new Date().getDate();
+
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
@@ -19,7 +23,10 @@ app.use(express.static("public"));
 app.use(session({
     secret: "MYPERSONALSECRETKEY",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24
+    }
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -33,22 +40,55 @@ app.get("/", async (req, res) => {
 })
 //route for profile
 app.get("/profile", async (req, res) =>{
-    res.render("profile.ejs")
+    if(req.isAuthenticated()){
+        let user = req.user;
+        res.render("profile.ejs", {
+            userData: user
+        })
+    }else{
+        res.redirect("/login")
+    }
 })
 // route for all user lists
 app.get("/lists", async (req, res) =>{
     if(req.isAuthenticated()){
-        // const data = await db.query("SELECT * FROM notes WHERE user_id = $1", [
-        //     result.id
-        // ])
-        // let content = data.rows;
-        // res.render("lists.ejs", {
-        //     notes: content
-        // })
-        res.render("lists.ejs")
+        let user = req.user;
+        const data = await db.query("SELECT * FROM notes WHERE user_id = $1", [
+            user.id
+        ])
+        let content = data.rows;
+        res.render("lists.ejs", {
+            notes: content
+        })
     }else{
         res.redirect("/login")
     }
+})
+
+// Edit lists
+app.post("/edit", (req, res) => {
+    let id = req.body.editId;
+    let title = req.body.editTitle;
+    let content = req.body.editContent;
+
+    console.log(content)
+    res.render("editList.ejs", {
+        id: id,
+        title: title,
+        content: content
+    });
+})
+
+app.post("/update", async (req, res) => {
+    let id = req.body.editId;
+    let title = req.body.editTitle;
+    let content = req.body.editContent;
+
+    const update = await db.query("UPDATE notes SET title = $1, content = $2 WHERE id = $3", [
+        title, content, id
+    ])
+    console.log(update);
+    res.redirect("/lists");
 })
 // Login and sign up
 app.get("/login", async (req, res) =>{
@@ -80,10 +120,8 @@ app.post("/login", passport.authenticate("local", {
 passport.use(new Strategy ({
     usernameField: 'email'
 }, async function verify(username, password, cb){
-    console.log("Running passport");
     try{
         let user = await userAuth.loginUser(username, password, db);
-        console.log("From passport" + user);
 
         if(user == "wrong password"){
             return cb(null, false);

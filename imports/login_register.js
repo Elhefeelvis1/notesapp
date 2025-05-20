@@ -36,7 +36,6 @@ export async function loginUser(email, userPassword, db) {
 
         if (data.length > 0) {
             const savedPassword = data[0].password;
-            console.log(data[0])
             const passwordMatch = await new Promise((resolve, reject) => {
                 bcrypt.compare(userPassword, savedPassword, (err, correct) => {
                     if (err) {
@@ -48,7 +47,6 @@ export async function loginUser(email, userPassword, db) {
             });
 
             if (passwordMatch) {
-                console.log(data[0])
                 return data[0];
             } else {
                 return "wrong password";

@@ -1,11 +1,12 @@
 <%- include('partials/full-header.ejs') %>
+    <% if(locals.userData){ %>
         <div class="profile">
             <div class="profile-dets">
                 <div class="profile-img">
                     <img src="" alt="">
                 </div>
                 <div class="username">
-                    <p>Elvis</p>
+                    <p><%= userData.name %></p>
                 </div>
                 <!-- <div class="follow">
                     <p><span>30</span> following</p>
@@ -31,33 +32,39 @@
                             <h3>All notes</h3>
                             <p>See all notes here</p>
                         </div>
-                        <button>See all notes</button>
+                        <div>
+                            <form action="/lists" method="GET">
+                                <button type="submit">See all notes</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="list favorites">
                         <div class="content">
                             <h3>Favourite notes</h3>
                             <p>Favourite notes only</p>
                         </div>
-                        <button>Open</button>
+                        <div>
+                            <form action="/favourites" method="GET">
+                                <button type="submit">Favorites</button>
+                            </form>
+                        </div>
                     </div>
                     <div class="list read-later">
                         <div class="content">
                             <h3>Uncompleted notes</h3>
                             <p>All uncompleted notes</p>
                         </div>
-                        <button>Open</button>
+                        <div>
+                            <form action="/uncompleted" method="GET">
+                                <button type="submit">Open</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    <% } %>    
     </main>
-    <div class="bottom-nav">
-        <div class="home-btn"><i class="fa-solid fa-house"></i></div>
-        <div class="favorites-btn"><i class="fa-solid fa-star"></i></div>
-        <div class="explore-btn"><i class="fa-solid fa-globe"></i></div>
-        <div class="notes-btn"><i class="fa-solid fa-note-sticky"></i></div>
-        <div class="profile-btn"><i class="fa-solid fa-user"></i></div>
-    </div>
 </body>
 <script src="dom-script.js"></script>
 </html>

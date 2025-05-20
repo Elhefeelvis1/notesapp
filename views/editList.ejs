@@ -9,28 +9,31 @@
 <body>
     <main>
         <div class="container">
+        <% if(locals.id){ %>
             <div class="edit-form">
                 <form action="/update" method="post" class="update">
-                    <input type="hidden" id="editId" name="editId" value="">
+                    <input type="hidden" id="editId" name="editId" value="<%= id %>">
                     <label for="editContent">Title</label>
-                    <input type="text" id="editTitle" name="editTitle">
+                    <input type="text" id="editTitle" name="editTitle" value="<%= title %>">
                     <label for="editContent">Content</label>
-                    <textarea name="editContent" id="editContent" rows="20"></textarea>
+                    <textarea name="editContent" id="editContent" rows="20" aria-valuetext="<%= content %>"></textarea>
 
                     <button type="submit">Update</button>
                 </form>
             </div>
-            <div class="edit-form">
+        <% } %>
+        <% if(!locals.id) { %>
+            <div class="edit-form add-new">
                 <form action="/addNew" method="post" class="add-new">
-                    <input type="hidden" id="editId" name="editId" value="">
                     <label for="editContent">Title</label>
                     <input type="text" id="editTitle" name="editTitle">
                     <label for="editContent">Content</label>
                     <textarea name="editContent" id="editContent" rows="20"></textarea>
-
+    
                     <button type="submit">Add new</button>
                 </form>
             </div>
+        <% } %>
         </div>
     </main>
 </body>

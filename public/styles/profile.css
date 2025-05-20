@@ -37,10 +37,10 @@
     gap: 15px;
 }
 .profile .options .option{
-    background-color: var(--black-search);
+    background-color: var(--black-shadow);
     padding: 5px 25px;
     border-radius: 20px;
-    border:2px solid var(--black-shadow);
+    border:2px solid var(--black-search);
 }
 .profile .notelist{
     margin-top: 40px;
@@ -58,8 +58,13 @@
 .profile .notelist .list:hover{
     background-color: var(--green);
 }
-.profile .notelist .list button{
+.profile .notelist button{
     padding: 10px 25px;
     border-radius: 25px;
     background-color: var(--gold);
+    cursor: pointer;
+    transition: all ease 0.2s;
+}
+.profile .notelist button:hover{
+    background-color: var(--black-search);
 }

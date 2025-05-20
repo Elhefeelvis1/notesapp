@@ -21,24 +21,26 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 40px;
+    padding-top: 120px;
 }
 
 .list-box{
     background-color: var(--p-black);
     max-width: 700px;
+    min-width: 400px;
     padding: 20px;
     border-radius: 15px;
 }
 
 .list-content .list-title{
     text-align: center;
+    margin-top: -20px;
 }
 
 .list-box .list-sub{
     display: flex;
     justify-content: space-between;
-    padding: 0 20px;
+    align-items: center;
 }
 
 .list-box .list-sub .list-update{
@@ -46,7 +48,7 @@ body{
     gap: 30px;
 }
 
-.list-sub .list-update input[type=submit]{
+.list-sub .list-update label{
     padding: 8px 25px;
     font-size: 15px;
     border-radius: 20px;
@@ -55,11 +57,11 @@ body{
     cursor: pointer;
 }
 
-.list-sub .list-update .list-edit input[type=submit]{
+.list-sub .list-update .list-edit label{
     background-color: var(--gold);
 }
 
-.list-sub .list-update .list-delete input[type=submit]{
+.list-sub .list-update .list-delete label{
     background-color: red;
 }
 
@@ -108,4 +110,14 @@ body{
 .edit-form form button:hover{
     background-color: var(--black-search);
     border: 3px inset var(--gold);
+}
+
+@media screen and (max-width: 569px) {
+    .lists-container{
+        padding-top: 40px;
+    }
+    .list-sub .list-update label{
+        padding: 8px 15px;
+        font-size: 15px;
+    }
 }
