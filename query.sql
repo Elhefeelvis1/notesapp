@@ -6,6 +6,15 @@ CREATE TABLE users (
     UNIQUE (email)
 );
 
+CREATE TABLE user_details (
+	id SERIAL PRIMARY KEY,
+	full_name TEXT,
+	country TEXT,
+	gender VARCHAR(8),
+	hobbies TEXT,
+	total_notes INTEGER
+)
+
 CREATE TABLE notes (
     id SERIAL PRIMARY KEY,
     title TEXT,
@@ -20,4 +29,8 @@ CREATE TABLE notes (
 INSERT INTO notes (
 	title, content, last_updated, favourite, completed,
 	user_id
-) VALUES ('Test Note 3', 'This is a test note for user test2', '2025-4-5', TRUE, TRUE, 3)
+    ) 
+VALUES (
+    'Test Note 3', 'This is a test note for user test2', 
+    '2025-4-5', TRUE, TRUE, 3
+    );

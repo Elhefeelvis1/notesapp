@@ -38,6 +38,7 @@ db.connect();
 app.get("/", async (req, res) => {
     res.render('index.ejs');
 });
+
 //route for profile
 app.get("/profile", async (req, res) =>{
     if(req.isAuthenticated()){
@@ -49,7 +50,8 @@ app.get("/profile", async (req, res) =>{
         res.redirect("/login");
     }
 });
-// route for all user lists
+
+// route for a user's lists of notes
 app.get("/lists", async (req, res) =>{
     if(req.isAuthenticated()){
         let user = req.user;
@@ -64,6 +66,21 @@ app.get("/lists", async (req, res) =>{
         res.redirect("/login");
     }
 });
+
+// Editing a note
+app.get("/edit", (req, res) => {
+    res.render("editList.ejs")
+});
+
+// Login and sign up
+app.get("/login", async (req, res) =>{
+    res.render("login.ejs");
+});
+app.get("/sign-up", async (req, res) =>{
+    res.render("sign-up.ejs");
+});
+
+// -----------POST routes---------------
 
 // Edit lists
 app.post("/edit", (req, res) => {
@@ -90,15 +107,6 @@ app.post("/update", async (req, res) => {
     console.log(update);
     res.redirect("/lists");
 });
-// Login and sign up
-app.get("/login", async (req, res) =>{
-    res.render("login.ejs");
-});
-app.get("/sign-up", async (req, res) =>{
-    res.render("sign-up.ejs");
-});
-
-// POST routes
 
 // Register new user
 app.post("/register", async (req, res) => {
@@ -108,7 +116,7 @@ app.post("/register", async (req, res) => {
 
     userAuth.registerUser(name, email, pwd, db);
 
-    res.render("login.ejs");
+    res.redirect("/login");
 })
 
 // User log in
@@ -117,6 +125,7 @@ app.post("/login", passport.authenticate("local", {
     failureRedirect: "/login"
 }));
 
+// Passport Authentication
 passport.use(new Strategy ({
     usernameField: 'email'
 }, async function verify(username, password, cb){
@@ -142,7 +151,7 @@ passport.deserializeUser((user, cb) => {
     cb(null, user)
 })
 
-//Listening in port 3000
+//Listening at port >> 3000
 app.listen(port, () => {
     console.log(`Server running at ${port}`)
 })
