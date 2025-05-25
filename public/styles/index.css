@@ -204,7 +204,7 @@
     }
     .home{
         padding: 0 10%;
-        margin-top: 180px;
+        margin-top: 100px;
     }
     .home .content{
         width: 70%;
@@ -223,8 +223,8 @@
         font-weight: 600;
     }
     .home .content .links .login{
-        background-color: var(--green);
-        color: var(--p-white);
+        background-color: var(--p-white);
+        color: var(--p-black);
     }
     .home .content .links .signUp{
         background-color: var(--gold);

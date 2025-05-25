@@ -60,17 +60,18 @@ app.get("/lists", async (req, res) =>{
         ]);
         let content = data.rows;
         res.render("lists.ejs", {
-            notes: content
+            notes: content,
+            user: user.id
         });
     }else{
         res.redirect("/login");
     }
 });
 
-// Editing a note
-app.get("/edit", (req, res) => {
-    res.render("editList.ejs")
-});
+// Edit route
+app.get("/edit", (req,res) => {
+    res.render("editList.ejs");
+})
 
 // Login and sign up
 app.get("/login", async (req, res) =>{
@@ -80,6 +81,22 @@ app.get("/sign-up", async (req, res) =>{
     res.render("sign-up.ejs");
 });
 
+// Link to User details
+app.get("/updateProfile", async (req, res) => {
+    if(req.isAuthenticated()){
+        let user = req.user.id;
+        const userDetails = await db.query(
+            "SELECT * FROM user_details WHERE user_id = $1", 
+            [user]
+        )
+        res.render("userDetails.ejs", {
+            userDetails: userDetails.rows,
+            userId : user
+        })
+    }else{
+        res.redirect("/login");
+    }
+})
 // -----------POST routes---------------
 
 // Edit lists
@@ -97,16 +114,80 @@ app.post("/edit", (req, res) => {
 });
 
 app.post("/update", async (req, res) => {
-    let id = req.body.editId;
-    let title = req.body.editTitle;
-    let content = req.body.editContent;
+    if(req.isAuthenticated()){
+        let id = req.body.editId;
+        let title = req.body.editTitle;
+        let content = req.body.editContent;
 
-    const update = await db.query("UPDATE notes SET title = $1, content = $2 WHERE id = $3", [
-        title, content, id
-    ])
-    console.log(update);
-    res.redirect("/lists");
+        const update = await db.query("UPDATE notes SET title = $1, content = $2 WHERE id = $3", [
+            title, content, id
+        ])
+        console.log(update);
+        res.redirect("/lists");
+    }else{
+        res.redirect("/login");
+    }
 });
+
+app.post("/addNew", async (req, res) => {
+    if(req.isAuthenticated()){
+        let title = req.body.title;
+        let content = req.body.content;
+        let user = req.user.id;
+
+        const noteId = await db.query(
+            "INSERT INTO notes (title, content, last_updated, user_id) VALUES ($1, $2, $3, $4) RETURNING id", 
+            [title, content, currentDate, user]
+        )
+
+        if (noteId){
+            res.redirect("/lists");
+        }else{
+            res.redirect("/edit")
+        }
+    }else{
+        res.redirect("/login");
+    }
+})
+
+// Edit profile
+app.post("/saveUpdate", async (req, res) => {
+    try{
+        let userId = req.body.userId;
+        let id = req.body.id;
+        let fullName = req.body.fullName;
+        let country = req.body.country;
+        let hobbies = req.body.hobbies;
+        let gender = req.body.gender;
+        console.log(userId, id);
+
+        console.log(typeof(id))
+
+        if(id){
+            await db.query("UPDATE user_details SET full_name = $1, country = $2, hobbies = $3", [
+                fullName, country, hobbies
+            ]);
+            res.redirect("/updateProfile");
+        }else{
+            await db.query("INSERT INTO user_details (full_name, country, gender, hobbies, user_id) VALUES ($1, $2, $3, $4, $5)", 
+                            [fullName, country, gender, hobbies, userId]
+                          );
+            res.redirect("/updateProfile");
+        }
+    }catch(err){
+        console.error(err)
+    }
+})
+
+// Update User details
+app.get("/updateProfile", async (req, res) => {
+    if(req.isAuthenticated()){
+        let user = req.user.id
+        console.log(user)
+    }else{
+        res.redirect("/login");
+    }
+})
 
 // Register new user
 app.post("/register", async (req, res) => {

@@ -11,8 +11,9 @@ CREATE TABLE user_details (
 	full_name TEXT,
 	country TEXT,
 	gender VARCHAR(8),
-	hobbies TEXT,
-	total_notes INTEGER
+	gender TEXT,
+	total_notes INTEGER,
+    user_id INTEGER REFERENCES users(id)
 )
 
 CREATE TABLE notes (

@@ -1,3 +1,4 @@
 .qodo
 imports/dbConn.js
 node_modules
+.env
