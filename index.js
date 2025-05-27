@@ -90,9 +90,10 @@ app.get("/updateProfile", async (req, res) => {
             [user]
         )
         res.render("userDetails.ejs", {
-            userDetails: userDetails.rows,
+            userDetails: userDetails.rows[0],
             userId : user
         })
+        console.log(userDetails.rows);
     }else{
         res.redirect("/login");
     }
@@ -159,7 +160,7 @@ app.post("/saveUpdate", async (req, res) => {
         let country = req.body.country;
         let hobbies = req.body.hobbies;
         let gender = req.body.gender;
-        console.log(userId, id);
+        console.log(id);
 
         console.log(typeof(id))
 

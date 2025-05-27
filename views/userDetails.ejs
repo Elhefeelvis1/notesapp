@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Details</title>
     <style>
-
+        .hidden{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -17,30 +19,43 @@
     <main>
         <div class="details">
             <ul>
-                <li><%= locals ? userDetails.full_name : "" %></li>
-                <li><%= locals ? userDetails.country : "" %></li>
-                <li><%= locals ? userDetails.gender : "" %></li>
-                <li><%= locals ? userDetails.hobbies : "" %></li>
-                <li><%= locals ? userDetails.total_notes : "" %></li>
+                <li><%= locals.userDetails ? userDetails.full_name : "" %></li>
+                <li><%= locals.userDetails ? userDetails.country : "" %></li>
+                <li><%= locals.userDetails ? userDetails.gender : "" %></li>
+                <li><%= locals.userDetails ? userDetails.hobbies : "" %></li>
+                <li><%= locals.userDetails ? userDetails.total_notes : "" %></li>
             </ul>
             <button class="editButton">Edit</button>
         </div>
 
-        <div class="detailsEdit">
+        <div class="detailsEdit hidden">
             <form action="/saveUpdate" method="post">
-                <input type="number" name="userId" value="<%= locals ? userId : "" %>">
-                <input type="number" name="id" value="<%= locals ? userDetails.user_id : 0 %>">
-                <input type="text" name="fullName" value="<%= locals ? userDetails.full_name : "" %>">
-                <input type="text" name="country" value="<%= locals ? userDetails.country : "" %>">
-                <input type="text" name="gender" value="<%= locals ? userDetails.gender : "" %>">
-                <input type="text" name="hobbies" value="<%= locals ? userDetails.hobbies : "" %>">
+                <input type="number" name="userId" value="<%= locals.userId ? userId : "" %>">
+                <input type="number" name="id" value="<%= locals.userDetails ? userDetails.user_id : "" %>">
+                <input type="text" name="fullName" value="<%= locals.userDetails ? userDetails.full_name : "Hello" %>">
+                <input type="text" name="country" value="<%= locals.userDetails ? userDetails.country : "" %>">
+                <input type="text" name="gender" value="<%= locals.userDetails ? userDetails.gender : "" %>">
+                <input type="text" name="hobbies" value="<%= locals.userDetails ? userDetails.hobbies : "" %>">
                 <input type="submit" value="Save">
             </form>
             <button class="cancelEdit">Cancel</button>
         </div>
     </main>
     <script>
-
+        let details = document.querySelector(".details");
+        let editBtn = document.querySelector(".editButton");
+        let detailsEdit = document.querySelector(".detailsEdit");
+        let cancelEdit = document.querySelector(".cancelEdit");
+        // Edit button to show form
+        editBtn.addEventListener('click', () => {
+            details.classList.add('hidden');
+            detailsEdit.classList.remove('hidden');
+        });
+        //Cancel button to hide form
+        cancelEdit.addEventListener('click', () => {
+            details.classList.remove('hidden');
+            detailsEdit.classList.add('hidden');
+        })
     </script>
 </body>
 </html>
