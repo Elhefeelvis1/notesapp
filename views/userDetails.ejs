@@ -3,39 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="styles/profile.css" type="text/css">
     <title>Details</title>
     <style>
-        .hidden{
-            display: none;
+        body{
+            font-family: Helvetica, sans-serif, Arial, sans-serif
+        }
+        header{
+            margin-bottom: 20px;
+        }
+        main{
+            max-width: 800px;
+            padding: 0 10px;
+            margin: auto;
         }
     </style>
 </head>
 <body>
     <header>
-        <div>
-            <i class="fa-solid fa-arrow-left"></i>
+        <div class="details-header">
+            <a href="/profile">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
         </div>
     </header>
     <main>
         <div class="details">
             <ul>
-                <li><%= locals.userDetails ? userDetails.full_name : "" %></li>
-                <li><%= locals.userDetails ? userDetails.country : "" %></li>
-                <li><%= locals.userDetails ? userDetails.gender : "" %></li>
-                <li><%= locals.userDetails ? userDetails.hobbies : "" %></li>
-                <li><%= locals.userDetails ? userDetails.total_notes : "" %></li>
+                <li>Full Name: <%= locals.userDetails ? userDetails.full_name : "" %></li>
+                <li>Country: <%= locals.userDetails ? userDetails.country : "" %></li>
+                <li> Gender: <%= locals.userDetails ? userDetails.gender : "" %></li>
+                <li>Hobbies: <%= locals.userDetails ? userDetails.hobbies : "" %></li>
+                <li>Total Notes: <%= locals.userDetails ? userDetails.total_notes : "0" %></li>
             </ul>
             <button class="editButton">Edit</button>
         </div>
 
         <div class="detailsEdit hidden">
             <form action="/saveUpdate" method="post">
-                <input type="number" name="userId" value="<%= locals.userId ? userId : "" %>">
-                <input type="number" name="id" value="<%= locals.userDetails ? userDetails.user_id : "" %>">
-                <input type="text" name="fullName" value="<%= locals.userDetails ? userDetails.full_name : "Hello" %>">
-                <input type="text" name="country" value="<%= locals.userDetails ? userDetails.country : "" %>">
-                <input type="text" name="gender" value="<%= locals.userDetails ? userDetails.gender : "" %>">
-                <input type="text" name="hobbies" value="<%= locals.userDetails ? userDetails.hobbies : "" %>">
+                <input type="hidden" name="id" value="<%= locals.userDetails ? userDetails.user_id : "" %>">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" value="<%= locals.userDetails ? userDetails.full_name : "Hello" %>">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" value="<%= locals.userDetails ? userDetails.country : "" %>">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" value="<%= locals.userDetails ? userDetails.gender : "" %>">
+                <label for="hobbies">Hobbies:</label>
+                <input type="text" id="hobbies" name="hobbies" value="<%= locals.userDetails ? userDetails.hobbies : "" %>">
                 <input type="submit" value="Save">
             </form>
             <button class="cancelEdit">Cancel</button>

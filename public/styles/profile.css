@@ -9,6 +9,9 @@
     --icon-size: 25px;
 }
 
+button, input[type=submit]{
+    cursor: pointer;
+}
 .profile{
     margin: 110px 0 0 ;
 }
@@ -64,9 +67,63 @@
     padding: 10px 25px;
     border-radius: 25px;
     background-color: var(--gold);
-    cursor: pointer;
     transition: all ease 0.2s;
 }
 .profile .notelist button:hover{
     background-color: var(--black-search);
+}
+
+/* User Details page */
+.hidden{
+    display: none;
+}
+.details-header{
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+.details-header i{
+    font-size: 30px;
+    margin-left: 20px;
+    color: var(--green);
+}
+.details ul{
+    padding-inline-start: 0px;
+}
+.details li{
+    margin-bottom: 10px;
+    padding: 10px;
+    list-style: none;
+    border-bottom: 2px solid var(--black-search);
+}
+.details .editButton{
+    background-color: var(--green);
+    color: var(--p-white);
+    padding: 5px 20px;
+    border: none;
+}
+.detailsEdit form{
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+}
+.detailsEdit form input{
+    padding: 10px;
+}
+.detailsEdit form label{
+    margin-top: 20px;
+}
+.detailsEdit form input[type=submit]{
+    background-color: var(--gold);
+    outline: none;
+    border: none;
+    margin-top: 20px;
+}
+.detailsEdit .cancelEdit{
+    background-color: red;
+    color: var(--p-white);
+    padding: 5px 20px;
+    border: none;
+    margin-top: 20px;
+    margin-left: 20px;
 }
