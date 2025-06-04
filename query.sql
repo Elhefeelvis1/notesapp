@@ -22,7 +22,7 @@ CREATE TABLE notes (
     content TEXT,
     last_updated date,
     favourite BOOLEAN,
-    completed BOOLEAN,
+    uncompleted BOOLEAN,
     user_id INTEGER REFERENCES users(id),
     UNIQUE (title, content)
 );

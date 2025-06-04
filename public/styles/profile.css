@@ -59,17 +59,22 @@ button, input[type=submit]{
     align-items: center;
     margin-bottom: 25px;
     padding: 10px 40px;
+    transition: all ease 0.2s;
 }
 .profile .notelist .list:hover{
-    background-color: var(--green);
+    background-color: var(--p-black);
+    box-shadow: 0 0 10px var(--black-search);
 }
-.profile .notelist button{
+.profile .notelist a{
     padding: 10px 25px;
     border-radius: 25px;
     background-color: var(--gold);
     transition: all ease 0.2s;
+    text-decoration: none;
+    color: var(--p-black);
+    font-size: smaller;
 }
-.profile .notelist button:hover{
+.profile .notelist a:hover{
     background-color: var(--black-search);
 }
 

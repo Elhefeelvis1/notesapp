@@ -3,6 +3,7 @@ import ejs from 'ejs';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy } from "passport-local";
+import env from "dotenv";
 
 // Importing database login from another file(ignored on git)
 import db from "./imports/dbConn.js";
@@ -11,17 +12,27 @@ import * as userAuth from "./imports/login_register.js";
 
 const app = express();
 const port = 3000;
+env.config();
 
 let currentDate = new Date().getFullYear() + "-" 
   + (new Date().getMonth() + 1) + "-"
   + new Date().getDate();
 
+// Checks if the checkbox is checked or not
+function isChecked(body){
+    if(body){
+        return true
+    }else{
+        return false
+    }
+}
+
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-// Seddion middleware (Express and passport)
+// Session middleware (Express and passport)
 app.use(session({
-    secret: "MYPERSONALSECRETKEY",
+    secret: process.env.SECRET_SESSION,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -68,9 +79,50 @@ app.get("/lists", async (req, res) =>{
     }
 });
 
+// Favourites 
+app.get("/favourites", async (req, res) => {
+    if(req.isAuthenticated()){
+        let user = req.user;
+        const data = await db.query("SELECT * FROM notes WHERE user_id = $1 AND favourite = $2", [
+            user.id, true
+        ]);
+        let content = data.rows;
+        res.render("lists.ejs", {
+            notes: content,
+            user: user.id
+        });
+    }else{
+        res.redirect("/login");
+    }
+})
+
+// Uncompleted
+app.get("/uncompleted", async (req, res) => {
+    if(req.isAuthenticated()){
+        let user = req.user;
+        const data = await db.query("SELECT * FROM notes WHERE user_id = $1 AND uncompleted = $2", [
+            user.id, true
+        ]);
+        let content = data.rows;
+        res.render("lists.ejs", {
+            notes: content,
+            user: user.id
+        });
+    }else{
+        res.redirect("/login");
+    }
+})
+
 // Edit route
 app.get("/edit", (req,res) => {
-    res.render("editList.ejs");
+    if(req.isAuthenticated()){
+        let user = req.user;
+        res.render("editList.ejs", {
+            user: user.id
+        });
+    }else{
+        res.redirect("/login");
+    }
 })
 
 // Login and sign up
@@ -98,6 +150,7 @@ app.get("/updateProfile", async (req, res) => {
         res.redirect("/login");
     }
 })
+
 // -----------POST routes---------------
 
 // Edit lists
@@ -105,43 +158,49 @@ app.post("/edit", (req, res) => {
     let id = req.body.editId;
     let title = req.body.editTitle;
     let content = req.body.editContent;
+    let favourites = req.body.favourites;
+    let uncompleted = req.body.uncompleted;
 
-    console.log(content)
     res.render("editList.ejs", {
         id: id,
         title: title,
-        content: content
+        content: content,
+        favourite: favourites,
+        uncompleted: uncompleted
     });
 });
 
 app.post("/update", async (req, res) => {
-    if(req.isAuthenticated()){
-        let id = req.body.editId;
-        let title = req.body.editTitle;
-        let content = req.body.editContent;
+    let id = req.body.editId;
+    let title = req.body.editTitle;
+    let content = req.body.editContent;
+    let favourites = isChecked(req.body.favourites);
+    let uncompleted = isChecked(req.body.uncompleted);
 
-        const update = await db.query("UPDATE notes SET title = $1, content = $2 WHERE id = $3", [
-            title, content, id
-        ])
-        console.log(update);
-        res.redirect("/lists");
-    }else{
-        res.redirect("/login");
-    }
+    console.log(uncompleted);
+    console.log(favourites);
+
+    const update = await db.query("UPDATE notes SET title = $1, content = $2, favourite = $3, uncompleted = $4 WHERE id = $5", [
+        title, content, favourites, uncompleted, id
+    ])
+    res.redirect("/lists");
 });
 
 app.post("/addNew", async (req, res) => {
     if(req.isAuthenticated()){
         let title = req.body.title;
         let content = req.body.content;
-        let user = req.user.id;
+        let favourites = isChecked(req.body.favourites)
+        let uncompleted = isChecked(req.body.uncompleted);
+        let user = req.body.userId;
 
         const noteId = await db.query(
-            "INSERT INTO notes (title, content, last_updated, user_id) VALUES ($1, $2, $3, $4) RETURNING id", 
-            [title, content, currentDate, user]
+            "INSERT INTO notes (title, content, last_updated, favourite, uncompleted, user_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", 
+            [title, content, currentDate, favourites, uncompleted, user]
         )
-
-        if (noteId){
+        console.log(noteId.rows[0]);
+        // checks if a new note was added if it has an Id
+        if (noteId.rows[0]){
             res.redirect("/lists");
         }else{
             res.redirect("/edit")

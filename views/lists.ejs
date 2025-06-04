@@ -18,6 +18,7 @@
                         </div>
                         <div class="list-sub">
                             <div class="list-data">
+                                <i class="<%= note.favourite == true ? "fa-solid fa-star" : "" %>"></i>
                                 <p><%= note.last_updated %></p>
                             </div>
                             <div class="list-update">
@@ -26,6 +27,8 @@
                                         <input type="hidden" name="editId" value="<%= note.id %>">
                                         <input type="hidden" name="editTitle" value="<%= note.title %>">
                                         <input type="hidden" name="editContent" value="<%= note.content %>">
+                                        <input type="hidden" name="favourites" value="<%= note.favourite %>">
+                                        <input type="hidden" name="uncompleted" value="<%= note.uncompleted %>">
                                         <label for="<%= note.id %>">Edit</label>
                                         <input id="<%= note.id %>" type="submit" hidden>
                                     </form>
