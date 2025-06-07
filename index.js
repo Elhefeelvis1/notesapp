@@ -3,6 +3,7 @@ import ejs from 'ejs';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy } from "passport-local";
+import GoogleStrategy from "passport-google-oauth20";
 import env from "dotenv";
 
 // Importing database login from another file(ignored on git)
@@ -47,7 +48,14 @@ db.connect();
 
 // GET routes for all pages
 app.get("/", async (req, res) => {
-    res.render('index.ejs');
+    if(req.isAuthenticated()){
+        let user = req.user;
+        res.render("index.ejs", {
+            userData: user
+        });
+    }else{
+        res.render("index.ejs");
+    }
 });
 
 //route for profile
@@ -133,6 +141,17 @@ app.get("/sign-up", async (req, res) =>{
     res.render("sign-up.ejs");
 });
 
+// logout
+app.get("/logout", (req, res) => {
+    req.logout((err) => {
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect("/login")
+        }
+    })
+})
+
 // Link to User details
 app.get("/updateProfile", async (req, res) => {
     if(req.isAuthenticated()){
@@ -150,6 +169,16 @@ app.get("/updateProfile", async (req, res) => {
         res.redirect("/login");
     }
 })
+
+// Google OAuth sign in
+app.get("/auth/google", passport.authenticate("google", {
+    scope:["profile", "email"]
+}));
+
+app.get("/auth/google/lists", passport.authenticate('google', {
+    successRedirect: "/lists",
+    failureRedirect: "/login"
+}))
 
 // -----------POST routes---------------
 
@@ -267,7 +296,33 @@ app.post("/login", passport.authenticate("local", {
 }));
 
 // Passport Authentication
-passport.use(new Strategy ({
+// Passport Google OAuth
+passport.use('google', new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:3000/auth/google/lists",
+        userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    },async(accessToken, refreshToken, profile, cb)=>{
+        let profileEmail = profile.emails[0].value;
+        console.log(profileEmail);
+        try{
+            const result = await db.query("SELECT * FROM users WHERE email = $1", [profileEmail]);
+            if(result.rows.length === 0){
+                const user = await db.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3)",[
+                    "Anonymous", profileEmail, "google"
+                ]);
+
+                cb(null, user.rows[0]);
+            }else{
+                cb(null, result.rows[0]);
+            }
+        }catch(err){
+            cb(err);
+        }
+    }
+))
+// Passport local Auth
+passport.use('local', new Strategy ({
     usernameField: 'email'
 }, async function verify(username, password, cb){
     try{

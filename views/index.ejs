@@ -16,10 +16,16 @@
                         vitae vel maxime. Magni, laboriosam aperiam.
                     </p>
                 </div>
-                <div class="links">
-                    <a class="login" href="/login">Login</a>
-                    <a class="signUp" href="/sign-up">Sign Up</a>
-                </div>
+                <% if(locals.userData){ %>
+                    <div class="user">
+                        <a href="/logout">Logout - <%= userData.name %></a>
+                    </div>
+                <% }else{ %>
+                    <div class="links">
+                        <a class="login" href="/login">Login</a>
+                        <a class="signUp" href="/sign-up">Sign Up</a>
+                    </div>
+                <% } %>
             </div>
         </div>
     </main>

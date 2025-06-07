@@ -222,6 +222,18 @@
         border-radius: 25px;
         font-weight: 600;
     }
+    .home .content .user{
+        display: flex;
+        justify-content: center;
+        margin-top: 40px;
+    }
+    .home .content .user a{
+        background-color: var(--black-search);
+        color: var(--p-black);
+        padding: 10px 15px;
+        border-radius: 20px;
+        text-decoration: none;
+    }
     .home .content .links .login{
         background-color: var(--p-white);
         color: var(--p-black);
