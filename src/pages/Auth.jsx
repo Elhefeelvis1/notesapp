@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Eye, EyeOff } from 'lucide-react';
+import Popup from '../components/Popup';
 
 export default function Auth() {
   const location = useLocation();
@@ -11,7 +12,7 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [alias, setAlias] = useState('');
   
   // States for password visibility toggles
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +20,13 @@ export default function Auth() {
   
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Handle Popup
+  const [popup, setPopup] = useState({
+      state: false,
+      content: '',
+      feedback: ''
+  });
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -42,13 +50,30 @@ export default function Auth() {
 
         // Insert their alias/name into the profiles table
         if (data?.user) {
+          const { data: existingAlias, error: fetchError } = await supabase
+          .from('profiles')
+          .select('alias')
+          .eq('alias', alias);
+
+          if (fetchError) throw fetchError;
+          
+          if (existingAlias.data && existingAlias.data.length > 0) throw new Error("Alias already exists");
+          
           await supabase.from('profiles').insert([
-            { user_id: data.user.id, alias: fullName }
+            { user_id: data.user.id, alias: alias }
           ]);
+
         }
+
+        setPassword('');
+        setConfirmPassword('');
+
+        setPopup({ state: true, feedback: 'success', content: 'Registration successful! Please log in.'});
+        setTimeout(() => {
+          navigate('/login');
+          setPopup({ state: false, feedback: '', content: '' });
+        }, 500);
         
-        alert('Registration successful! Please log in.');
-        navigate('/login');
       } else {
         // Login user
         const { error: signInError } = await supabase.auth.signInWithPassword({
@@ -57,6 +82,7 @@ export default function Auth() {
         });
         
         if (signInError) throw signInError;
+
         navigate('/notes');
       }
     } catch (err) {
@@ -73,8 +99,15 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+    <div className="w-full relative min-h-screen relative flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      {popup.state && (
+        <Popup
+          feedback={popup.feedback}
+          content={popup.content}
+          onClose={() => setPopup({ state: false, content: "", feedback: "" })}
+        />
+      )}
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100 z-10">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {isSignUp ? 'Create your account' : 'Sign in to your account'}
@@ -91,8 +124,8 @@ export default function Auth() {
                   type="text"
                   required
                   placeholder="Enter your alias"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
+                  value={alias}
+                  onChange={(e) => setAlias(e.target.value)}
                   className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
