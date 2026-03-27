@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
+import { useAuth } from '../components/AuthProvider';
 
 export default function Profile() {
+  const {session} = useAuth();
   const [profile, setProfile] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const [tagsInput, setTagsInput] = useState('');
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchProfile();
   }, []);
 
   const fetchProfile = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return navigate('/login');
 
-    const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single();
+    const { data } = await supabase.from('profiles').select('*').eq('user_id', session.user.id).single();
     if (data) {
       setProfile(data);
       setTagsInput(data.tags ? data.tags.join(', ') : '');
@@ -25,15 +23,14 @@ export default function Profile() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag);
-    const { data: { user } } = await supabase.auth.getUser();
+    const tagsArray = tagsInput.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
     
     await supabase.from('profiles').update({
       full_name: profile.full_name,
       country: profile.country,
       hobbies: profile.hobbies,
       tags: tagsArray
-    }).eq('id', user.id);
+    }).eq('user_id', session.user.id);
     
     setIsEditing(false);
   };

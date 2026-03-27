@@ -40,30 +40,27 @@ export default function Auth() {
           throw new Error("Passwords don't match");
         }
 
-        // Register user
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        
-        if (signUpError) throw signUpError;
-
-        // Insert their alias/name into the profiles table
-        if (data?.user) {
-          const { data: existingAlias, error: fetchError } = await supabase
+        const { data: existingAlias, error: fetchError } = await supabase
           .from('profiles')
           .select('alias')
           .eq('alias', alias);
 
-          if (fetchError) throw fetchError;
-          
-          if (existingAlias.data && existingAlias.data.length > 0) throw new Error("Alias already exists");
-          
-          await supabase.from('profiles').insert([
-            { user_id: data.user.id, alias: alias }
-          ]);
+        if (fetchError) throw fetchError;
+        
+        if (existingAlias && existingAlias.length > 0) throw new Error("Alias already exists");
 
-        }
+        // Register user
+        const { data: signUp, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              alias: alias
+            }
+          },
+        });
+        
+        if (signUpError) throw signUpError;
 
         setPassword('');
         setConfirmPassword('');
@@ -72,7 +69,7 @@ export default function Auth() {
         setTimeout(() => {
           navigate('/login');
           setPopup({ state: false, feedback: '', content: '' });
-        }, 500);
+        }, 1000);
         
       } else {
         // Login user
@@ -117,7 +114,7 @@ export default function Auth() {
         {error && <div className="bg-red-50 text-red-500 p-3 rounded text-sm text-center">{error}</div>}
 
         <form className="mt-8 space-y-6" onSubmit={handleAuth}>
-          <div className="rounded-md shadow-sm space-y-4">
+          <div className=" space-y-4">
             {isSignUp && (
               <div>
                 <input
@@ -193,7 +190,7 @@ export default function Auth() {
           </div>
         </form>
 
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-300" />
@@ -211,7 +208,7 @@ export default function Auth() {
               Google
             </button>
           </div>
-        </div>
+        </div> */}
 
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">

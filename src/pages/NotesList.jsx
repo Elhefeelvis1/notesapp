@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Edit2, Trash2, Star, Plus } from 'lucide-react';
+import { useAuth } from '../components/AuthProvider';
 
 export default function NotesList() {
+  const { session } = useAuth();
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
 
@@ -12,14 +14,12 @@ export default function NotesList() {
   }, []);
 
   const fetchMyNotes = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return navigate('/login');
 
     const { data, error } = await supabase
       .from('notes')
       .select('*')
-      .eq('user_id', user.id)
-      .order('updated_at', { ascending: false });
+      .eq('user_id', session.user.id)
+      .order('created_at', { ascending: false });
 
     if (!error) setNotes(data || []);
   };

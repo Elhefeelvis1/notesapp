@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { supabase } from '../supabaseClient'; // Ensure you initialize supabase in a separate file
+import { supabase } from '../supabaseClient';
+import { useAuth } from '../components/AuthProvider';
 
 export default function EditNote() {
+  const { session } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -25,14 +27,14 @@ export default function EditNote() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const tagsArray = tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag);
+    const tagsArray = tagsInput.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag);
     
     if (tagsArray.length < 2) {
       setError('Please provide at least two comma-separated tags.');
       return;
     }
 
-    const payload = { ...formData, tags: tagsArray };
+    const payload = { ...formData, tags: tagsArray, user_id: session.user.id };
     
     const { error: dbError } = id 
       ? await supabase.from('notes').update(payload).eq('id', id)
