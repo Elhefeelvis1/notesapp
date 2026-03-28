@@ -89,11 +89,11 @@ export default function Auth() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-  };
+  // const handleGoogleLogin = async () => {
+  //   await supabase.auth.signInWithOAuth({
+  //     provider: 'google',
+  //   });
+  // };
 
   return (
     <div className="w-full relative min-h-screen flex items-center justify-center bg-gray-50 -mt-16 px-4 sm:px-6 lg:px-8">

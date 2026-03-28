@@ -32,7 +32,15 @@ export default function Navbar() {
         : "text-gray-700 hover:text-white hover:rounded-xl hover:bg-blue-600"
     }`;
 
+  const BottomNavLinkClass = ({ isActive }) => 
+    `flex flex-col justify-center items-center py-1 px-3 transition-colors ${
+      isActive 
+        ? "text-white bg-blue-600 rounded-xl" 
+        : "text-gray-700 hover:text-white hover:rounded-xl hover:bg-blue-600"
+    }`;
+
   return (
+    <>
     <header className="fixed top-0 w-full py-2 bg-white shadow-md z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-12">
         <div className="flex-shrink-0">
@@ -41,7 +49,7 @@ export default function Navbar() {
           </Link>
         </div>
         
-        <div className="hidden md:flex space-x-5">
+        <div className="hidden sm:flex space-x-5">
           <NavLink to="/" className={navLinkClass} end>
             <Home className="w-5 h-5 mr-1"/> Home
           </NavLink>
@@ -73,5 +81,22 @@ export default function Navbar() {
         </div>
       </nav>
     </header>
+    {/* Bottom Nav */}
+    <div className="block sm:hidden fixed bottom-0 left-0 w-full h-16 py-2 px-6 rounded-t-[30px] flex justify-around space-x-5 bg-white shadow-[0_-3px_15px_0_rgba(0,0,0,0.3)] z-50">
+      <NavLink to="/" className={BottomNavLinkClass}>
+        <Home className="w-5 h-5"/>
+        <span className="text-xs">Home</span>
+      </NavLink>
+      <NavLink to="/feed" className={BottomNavLinkClass}>
+        <Globe className="w-5 h-5"/> Feeds
+      </NavLink>
+      <NavLink to="/notes" className={BottomNavLinkClass}>
+        <StickyNote className="w-5 h-5"/> Notes
+      </NavLink>
+      <NavLink to="/profile" className={BottomNavLinkClass}>
+        <User className="w-5 h-5"/> Profile
+      </NavLink>
+    </div>
+    </>
   );
 }
