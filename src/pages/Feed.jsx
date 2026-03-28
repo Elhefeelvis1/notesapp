@@ -8,7 +8,7 @@ import { useSearchParams } from 'react-router-dom';
 export default function Feed() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search');
-  const {loading, session} = useAuth();
+  const {session} = useAuth();
   const [publicNotes, setPublicNotes] = useState([]);
   const [userTags, setUserTags] = useState([]);
   const [pageLoading, setPageLoading] = useState(true);
@@ -48,11 +48,14 @@ export default function Feed() {
 
   return (
     <>
-    {loading && <BouncingLoader />}
+    {pageLoading && <BouncingLoader />}
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-2">Explore Feed</h1>
       <p className="text-gray-600 mb-6">
-        Tailored to your interests: {userTags.length > 0 ? userTags.join(', ') : 'All public notes'}
+        Tailored to your interests: {userTags.length > 0 ? 
+          <span> userTags.join(', ')
+        </span>
+        : 'All public notes'}
       </p>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

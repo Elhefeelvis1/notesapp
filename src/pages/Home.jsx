@@ -50,8 +50,8 @@ export default function Home() {
             </Link>
           </div>
         )}
-        <div className='flex flex-col md:flex-row xl:w-[1000px] justify-between items-center mt-16 gap-4'>
-          <div className='w-1/3 h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
+        <div className='flex flex-col md:flex-row xl:w-[800px] justify-between items-center mt-16 gap-4'>
+          <div className=' h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
             <div className='relative mb-2'>
               <div className='absolute left-0 inline bg-blue-600 text-white p-1 rounded-lg shadow-md '>
                 <GlobeLock size={22} className=''/>
@@ -65,7 +65,7 @@ export default function Home() {
               Tailor your feed to see exactly what matters to you.
             </p>
           </div>
-          <div className='w-1/3 h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
+          <div className=' h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
             <div className='relative mb-2'>
               <div className='absolute left-0 inline bg-blue-600 text-white p-1 rounded-lg shadow-md'>
                 <GlobeLock size={22} className=''/>
@@ -78,7 +78,7 @@ export default function Home() {
               Your notes, your rules.
             </p>
           </div>
-          <div className='w-1/3 h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
+          <div className='h-70 bg-white p-4 pt-4 rounded-lg shadow-lg'>
             <div className='relative mb-2'>
               <div className='absolute left-0 inline bg-blue-600 text-white p-1 rounded-lg shadow-md'>
                 <GlobeLock size={22} className=''/>

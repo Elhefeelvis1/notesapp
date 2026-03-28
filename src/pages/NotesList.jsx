@@ -3,11 +3,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Edit2, Trash2, Star, Plus } from 'lucide-react';
 import { useAuth } from '../components/AuthProvider';
+import BouncingLoader from '../components/BouncingLoader';
+import Popup from '../components/Popup';
 
 export default function NotesList() {
   const { session } = useAuth();
   const [notes, setNotes] = useState([]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [showPopup, setShowPopup] = useState({
+    show: false,
+    feedback: '',
+    message: ''
+  });
 
   useEffect(() => {
     fetchMyNotes();
@@ -15,13 +23,24 @@ export default function NotesList() {
 
   const fetchMyNotes = async () => {
 
-    const { data, error } = await supabase
+    try{
+      const { data, error } = await supabase
       .from('notes')
       .select('*')
       .eq('user_id', session.user.id)
       .order('created_at', { ascending: false });
 
-    if (!error) setNotes(data || []);
+      if (!error){
+        setNotes(data || []);
+        setLoading(false);
+      }else{
+        throw error;
+      }
+
+    }catch(error){
+      setShowPopup({ show: true, feedback: 'error', message: error.message });
+      setLoading(false);
+    }
   };
 
   const deleteNote = async (id) => {
@@ -32,7 +51,17 @@ export default function NotesList() {
   };
 
   return (
+    <>
+    {loading && <BouncingLoader />}
     <div className="max-w-5xl mx-auto p-6 relative min-h-screen">
+      {showPopup.show && (
+        <Popup 
+          feedback={showPopup.feedback}
+          content={showPopup.message}
+          onClose={() => setShowPopup({ show: false, feedback: '', message: '' })}
+        />
+      )}
+
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Notes</h1>
         <Link to="/edit" className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
@@ -81,5 +110,6 @@ export default function NotesList() {
         </div>
       )}
     </div>
+    </>
   );
 }
