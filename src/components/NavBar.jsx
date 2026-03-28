@@ -20,7 +20,7 @@ export default function Navbar() {
       navigate(`/feed?search=${encodeURIComponent(searchQuery.trim())}`);
     }
     
-    // Optional: Clear the input after searching
+    // Clear the input after searching
     setSearchQuery('');
   };
 
