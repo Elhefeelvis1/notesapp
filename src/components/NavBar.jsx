@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Star, Globe, StickyNote, User, Search, Settings } from 'lucide-react';
+import { Home, Globe, StickyNote, User, Search, Settings } from 'lucide-react';
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
