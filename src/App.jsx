@@ -14,7 +14,7 @@ function App() {
     <Router>
       <AuthProvider>
         <Navbar />
-        <div className=" min-h-screen bg-gray-50 pt-16 sm:pt-10 pb-10 sm:pb-0">
+        <div className=" min-h-screen bg-gray-50 pt-16 sm:pt-10 pb-18 sm:pb-0">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/notes" element={
