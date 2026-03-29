@@ -88,18 +88,18 @@ export default function EditNote() {
           </label>
         </div>
         <div>
-          <label className="block text-gray-700 font-medium">Title</label>
-          <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full mt-1 p-2 border rounded" />
+          <input type="text" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full mt-1 p-2 rounded outline-0 text-xl font-semibold" placeholder='Title'/>
         </div>
-        
+
+        <div className='border-t-2 border-slate-300'></div>
+
         <div>
-          <label className="block text-gray-700 font-medium">Content</label>
-          <textarea rows="10" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} className="w-full mt-1 p-2 border rounded"></textarea>
+          <textarea rows="10" value={formData.content} onChange={e => setFormData({...formData, content: e.target.value})} className="w-full mt-1 p-2 rounded outline-0" placeholder='Enter the contents....'></textarea>
         </div>
 
         <div>
           <label className="block text-gray-700 font-medium">Tags (comma separated, at least 2)</label>
-          <input type="text" placeholder="e.g., programming, javascript" value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full mt-1 p-2 border rounded" />
+          <input type="text" placeholder="e.g., programming, javascript" value={tagsInput} onChange={e => setTagsInput(e.target.value)} className="w-full mt-1 p-2 rounded outline-0" />
         </div>
 
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">

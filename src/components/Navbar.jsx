@@ -65,7 +65,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <form className="relative hidden sm:block" onSubmit={handleSearch}>
+          <form className="relative block" onSubmit={handleSearch}>
             <input 
               type="text" 
               placeholder="Search by tags." 
@@ -77,7 +77,7 @@ export default function Navbar() {
               <Search className="w-4 h-4" />
             </button>
           </form>
-          <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-600" />
+          {/* <Settings className="w-5 h-5 text-gray-600 cursor-pointer hover:text-blue-600" /> */}
         </div>
       </nav>
     </header>

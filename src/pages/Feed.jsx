@@ -53,8 +53,7 @@ export default function Feed() {
       <h1 className="text-3xl font-bold mb-2">Explore Feed</h1>
       <p className="text-gray-600 mb-6">
         Tailored to your interests: {userTags.length > 0 ? 
-          <span> userTags.join(', ')
-        </span>
+          <span className='px-2 text-blue-700 bg-blue-100 border border-blue-600 rounded-full'> {userTags.join(', ')} </span>
         : 'All public notes'}
       </p>
 
